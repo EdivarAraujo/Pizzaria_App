@@ -4,6 +4,8 @@ import { api } from "./services/api"
 
 export async function middleware(req:NextRequest, res:NextResponse) {
   const { pathname } = req.nextUrl
+
+  console.log(pathname, "teste")
   
   if(pathname.startsWith("_next") || pathname === "/"){
     return NextResponse.next()

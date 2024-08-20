@@ -19,6 +19,8 @@ export default function Home(){
       return
     }
 
+    console.log(email, password, "teste")
+
     try {
       const response = await api.post("/session", {
         email,

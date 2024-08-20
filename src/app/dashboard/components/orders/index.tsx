@@ -1,7 +1,12 @@
+"use client"
+import { use } from "react"
 import styles from "./styles.module.scss"
 import { RefreshCcw } from "lucide-react"
 import { OrderProps } from "@/lib/order.type"
 import { ModalOrder } from "@/app/dashboard/components/modal"
+import { OrderContext } from "@/providers/order"
+import RenderConditional from "@/components/RenderConditional"
+
 
 
 interface Props{
@@ -9,6 +14,12 @@ interface Props{
 }
 
 export function Order({orders}: Props){
+  const { isOpen, onRequestOpen } = use(OrderContext)
+
+  async function handleDetailOrder(order_id:string){
+   await onRequestOpen(order_id)
+  }
+
   return(
     <>
       <main className={styles.container}>
@@ -20,9 +31,9 @@ export function Order({orders}: Props){
         </section>
         <section className={styles.listOrders}>
           {
-            orders.map((order, index) =>{
+            orders.map((order) =>{
               return(
-                <button key={order?.id} className={styles.orderItem}>
+                <button key={order?.id} className={styles.orderItem} onClick={() => handleDetailOrder(order?.id)}>
                 <div className={styles.tag}></div>
                 <span>Mesa: {order?.table}</span>
               </button>
@@ -31,7 +42,9 @@ export function Order({orders}: Props){
           }
         </section>
       </main>
-     <ModalOrder/>
+      <RenderConditional isTrue={isOpen}>
+         <ModalOrder/>
+      </RenderConditional>
     </>
   )
 }
